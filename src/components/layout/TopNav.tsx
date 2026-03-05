@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Bell, ChevronRight, User, Settings, LogOut, UserCircle } from 'lucide-react';
+import { Bell, User, Settings, LogOut, UserCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +15,7 @@ import { Button } from '@/components/ui/button';
 
 export function TopNav() {
   return (
-    <header className="h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-30">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span>EduWisdom AI</span>
-        <ChevronRight className="h-4 w-4" />
-        <span className="text-foreground font-medium">知识库管理</span>
-      </div>
-
+    <header className="h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-end px-6 sticky top-0 z-30">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
