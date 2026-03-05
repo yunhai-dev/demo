@@ -14,9 +14,7 @@ import {
   FileText, 
   Search, 
   PieChart, 
-  Sparkles,
-  RefreshCw,
-  Info
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,7 +22,6 @@ import { useSelection } from '@/context/SelectionContext';
 import { cn } from '@/lib/utils';
 import { contextualAIQuestionAnswering } from '@/ai/flows/contextual-ai-question-answering';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Message {
   id: string;
@@ -85,42 +82,26 @@ export default function ChatPage() {
     }
   };
 
-  const clearChat = () => {
-    setMessages([]);
-  };
-
   return (
-    <div className="flex flex-col h-full bg-slate-50/50">
+    <div className="flex flex-col h-full bg-white">
       {/* Messages Area */}
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto"
       >
         {isEmpty ? (
-          <div className="h-full flex flex-col items-center justify-center p-6 text-center max-w-2xl mx-auto space-y-8">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
-              <Sparkles className="h-8 w-8 animate-pulse" />
+          <div className="h-full flex flex-col items-center justify-center p-6 text-center max-w-4xl mx-auto space-y-8">
+            {/* AI Logo Area */}
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
+                <span className="text-white text-4xl font-bold italic tracking-tighter">Ai</span>
+              </div>
+              <div className="absolute -inset-2 rounded-full border border-blue-100 animate-pulse -z-10" />
             </div>
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900">您好，我是 EduWisdom AI</h2>
-              <p className="text-slate-500 text-base">我可以帮您解读教育政策、检索学术资源或辅助课题研究报告的撰写。</p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-              {[
-                '2024年教育重点工作有哪些？', 
-                '帮我总结一下《中国教育现代化2035》',
-                '如何提高课堂教学的互动性？',
-                '最新的教育数字化政策解读'
-              ].map((q) => (
-                <button 
-                  key={q}
-                  onClick={() => setInput(q)}
-                  className="p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-sm text-left transition-all hover:border-primary/30 shadow-sm active:scale-[0.98]"
-                >
-                  {q}
-                </button>
-              ))}
+
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold tracking-tight text-slate-900">上午好，有什么我可以帮助你的吗？</h2>
+              <p className="text-slate-400 text-lg">请从左侧选择知识库或文档开始问答</p>
             </div>
           </div>
         ) : (
@@ -134,7 +115,7 @@ export default function ChatPage() {
                   "max-w-[85%] p-4 rounded-2xl shadow-sm text-sm leading-relaxed",
                   m.role === 'user' 
                     ? "bg-primary text-primary-foreground rounded-tr-none" 
-                    : "bg-white border border-slate-200 text-slate-800 rounded-tl-none"
+                    : "bg-slate-50 border border-slate-100 text-slate-800 rounded-tl-none"
                 )}>
                   {m.content}
                 </div>
@@ -168,12 +149,8 @@ export default function ChatPage() {
             ))}
             {isLoading && (
               <div className="flex flex-col items-start animate-pulse">
-                <div className="max-w-[85%] p-4 bg-white border border-slate-200 rounded-2xl rounded-tl-none">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" />
-                    <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.4s]" />
-                  </div>
+                <div className="max-w-[85%] p-4 bg-slate-50 border border-slate-100 rounded-2xl rounded-tl-none text-slate-400 text-xs">
+                  AI 正在思考中...
                 </div>
               </div>
             )}
@@ -182,49 +159,16 @@ export default function ChatPage() {
       </div>
 
       {/* Input Area Container */}
-      <div className="p-4 sm:p-6 bg-background border-t border-slate-200">
-        <div className="max-w-4xl mx-auto space-y-4">
+      <div className="p-4 sm:p-10 bg-white">
+        <div className="max-w-4xl mx-auto space-y-6">
           
-          {/* Tool Bar */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {[
-              { icon: PenTool, label: 'AI 写作' },
-              { icon: Languages, label: 'AI 翻译' },
-              { icon: FileText, label: 'AI 摘要' },
-              { icon: Search, label: 'AI 综述' },
-              { icon: PieChart, label: 'AI 问数' },
-            ].map((tool) => (
-              <button 
-                key={tool.label}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:text-primary hover:border-primary/40 transition-all shadow-sm whitespace-nowrap active:bg-slate-50"
-              >
-                <tool.icon className="h-3.5 w-3.5" />
-                {tool.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Actual Input Box */}
-          <div className="relative bg-white rounded-2xl border border-slate-200 shadow-lg focus-within:ring-2 focus-within:ring-primary/10 transition-shadow">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-slate-50">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none px-2 py-0 h-5 text-[10px] font-bold">RAG ACTIVE</Badge>
-                <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                  <Info className="h-3 w-3" />
-                  已关联 {count} 项知识库上下文
-                </span>
-              </div>
-              <button onClick={clearChat} className="text-[10px] text-slate-400 hover:text-primary transition-colors flex items-center gap-1 font-medium">
-                <RefreshCw className="h-3 w-3" />
-                清空对话
-              </button>
-            </div>
-            
+          {/* Main Input Box */}
+          <div className="relative bg-white rounded-3xl border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary/30 transition-all">
             <Textarea 
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="请输入您的问题..."
-              className="min-h-[80px] max-h-[300px] border-none focus-visible:ring-0 text-sm resize-none py-4 px-4 bg-transparent"
+              className="min-h-[120px] max-h-[400px] border-none focus-visible:ring-0 text-base resize-none py-6 px-6 bg-transparent"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -233,26 +177,53 @@ export default function ChatPage() {
               }}
             />
             
-            <div className="flex items-center justify-between px-4 pb-3">
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 rounded-lg hover:bg-slate-100 hover:text-primary">
-                  <Mic className="h-4 w-4" />
+            {/* Input Footer Bar */}
+            <div className="flex items-center justify-between px-4 pb-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-9 px-3 rounded-xl bg-blue-50/50 border-blue-100 text-blue-600 hover:bg-blue-100 hover:text-blue-700 flex items-center gap-1.5 font-medium"
+              >
+                已选 {count} 项
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-400 rounded-full hover:bg-slate-100">
+                  <Mic className="h-5 w-5" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 rounded-lg hover:bg-slate-100 hover:text-primary">
-                  <Upload className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-400 rounded-full hover:bg-slate-100">
+                  <Upload className="h-5 w-5" />
+                </Button>
+                <Button 
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                  size="icon" 
+                  className="bg-primary hover:bg-primary/90 text-white rounded-full h-10 w-10 shadow-md ml-1"
+                >
+                  <Send className="h-5 w-5" />
                 </Button>
               </div>
-              
-              <Button 
-                onClick={handleSend}
-                disabled={!input.trim() || isLoading}
-                size="sm" 
-                className="bg-primary hover:bg-primary/90 text-white rounded-xl px-6 h-9 shadow-md transition-all active:scale-95"
-              >
-                <Send className="h-4 w-4 mr-2" />
-                发送
-              </Button>
             </div>
+          </div>
+
+          {/* Tool Pills Bar - Below Input */}
+          <div className="flex items-center justify-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { icon: PenTool, label: 'AI 写作', color: 'text-green-500', bg: 'bg-green-50' },
+              { icon: Languages, label: 'AI 翻译', color: 'text-blue-500', bg: 'bg-blue-50' },
+              { icon: FileText, label: 'AI 摘要', color: 'text-orange-500', bg: 'bg-orange-50' },
+              { icon: Search, label: 'AI 综述', color: 'text-slate-500', bg: 'bg-slate-50' },
+              { icon: PieChart, label: 'AI 问数', color: 'text-red-500', bg: 'bg-red-50' },
+            ].map((tool) => (
+              <button 
+                key={tool.label}
+                className="flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:border-primary/40 hover:text-primary transition-all shadow-sm whitespace-nowrap active:scale-95"
+              >
+                <tool.icon className={cn("h-4 w-4", tool.color)} />
+                {tool.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
