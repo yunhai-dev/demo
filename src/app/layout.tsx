@@ -4,8 +4,8 @@ import { SelectionProvider } from '@/context/SelectionContext';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'EduWisdom AI - 中国教育科学研究院 AI 知识库系统',
-  description: '专业、智能的教育科研知识库系统',
+  title: '领航智库 AI - 航空制造智能知识管理系统',
+  description: '专业、智能的航空制造科研与工程知识库',
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased overflow-hidden">
         <SelectionProvider>
           {children}
           <Toaster />
