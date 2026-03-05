@@ -47,16 +47,16 @@ const AI_TOOLS = [
 
 const MOCK_RESPONSES: Record<string, { thought: string; content: string; questions: string[]; sources: string[] }> = {
   writing: {
-    thought: "用户要求生成关于‘教育数字化转型’的公文大纲。首先，我需要明确公文的规范格式，通常包括背景、目标、任务和保障。其次，结合当前教育数字化的热点。我计划将重点放在‘人工智能赋能’和‘高质量均衡’两个维度。最后，检查语言风格，确保严谨专业。",
-    content: "已为您生成一份关于‘教育数字化转型’的公文大纲：\n\n1. 背景与意义：当前全球教育竞争的新高地\n2. 总体要求：坚持育人为本，技术赋能\n3. 重点任务：基础设施建设、资源平台优化、素养提升\n4. 保障措施：经费投入与安全防护。\n\n您需要我对其中哪个章节进行详细扩写吗？",
+    thought: "用户要求生成关于‘数字化转型’的公文大纲。首先，我需要明确公文的规范格式，通常包括背景、目标、任务和保障。其次，结合当前行业的热点。我计划将重点放在‘人工智能赋能’和‘高质量发展’两个维度。最后，检查语言风格，确保严谨专业。",
+    content: "已为您生成一份关于‘数字化转型’的公文大纲：\n\n1. 背景与意义：当前全球产业竞争的新高地\n2. 总体要求：坚持育人为本，技术赋能\n3. 重点任务：基础设施建设、资源平台优化、素养提升\n4. 保障措施：经费投入与安全防护。\n\n您需要我对其中哪个章节进行详细扩写吗？",
     questions: ["扩写第三部分“重点任务”", "将大纲转换为PPT演讲稿格式", "增加关于区域差异的分析"],
-    sources: ["《2024年教育发展纲要.pdf》", "《教育数字化转型指导意见》"]
+    sources: ["《2024年行业发展纲要.pdf》", "《数字化转型指导意见》"]
   },
   default: {
-    thought: "用户提出了一个开放性的教育领域问题。我将从中国教育科学研究院的权威视角出发，首先检索相关的政策文件库。接着，分析当前教育现代化的主要瓶颈和发展阶段。我需要给出一个既有宏观高度，又有微观案例支撑的回答。",
-    content: "这是一个非常深刻的问题。基于中国教育科学研究院的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国教育现代化已进入加速期，特别是针对您关注的领域。",
+    thought: "用户提出了一个开放性的专业领域问题。我将从航空工业的权威视角出发，首先检索相关的政策文件库。接着，分析当前现代化的主要瓶颈和发展阶段。我需要给出一个既有宏观高度，又有微观案例支撑的回答。",
+    content: "这是一个非常深刻的问题。基于航空工业的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国现代化已进入加速期，特别是针对您关注的领域。",
     questions: ["查看相关的政策条文原文", "获取近三年的统计数据对比", "了解在该领域表现突出的示范区"],
-    sources: ["《国家中长期教育改革和发展规划纲要》", "《教育科研成果汇编2023》"]
+    sources: ["《国家中长期改革和发展规划纲要》", "《科研成果汇编2023》"]
   }
 };
 
@@ -146,7 +146,7 @@ export default function ChatPage() {
               </div>
               <div className="space-y-1">
                 <h2 className="text-[18px] font-bold text-[#1D2129]">上午好，请问有什么可以帮您？</h2>
-                <p className="text-[#909399] text-[13px]">基于航空工业教科院知识库为您提供专业解答</p>
+                <p className="text-[#909399] text-[13px]">基于航空工业知识库为您提供专业解答</p>
               </div>
               {renderInputArea()}
             </div>
@@ -294,7 +294,7 @@ export default function ChatPage() {
           <Textarea 
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下录入信息...` : "输入您的问题，基于教科院知识库为您解答..."}
+            placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下录入信息...` : "输入您的问题，基于航空工业知识库为您解答..."}
             className={cn(
               "min-h-[80px] max-h-[200px] border-none focus-visible:ring-0 focus:ring-0 shadow-none text-[14px] leading-[22px] px-4 bg-transparent placeholder:text-[#A8ABB2] font-body resize-none",
               selectedMode ? "pt-1 pb-3" : "py-4"

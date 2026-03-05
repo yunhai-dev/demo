@@ -4,8 +4,8 @@ import { SelectionProvider } from '@/context/SelectionContext';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: '航空工业教科院办公平台', // 遵循 航空工业 + 单位 + 系统名 规范
-  description: '专业、规范的教育科研智能管理系统',
+  title: '航空工业办公平台', // 遵循 航空工业 + 系统名 规范
+  description: '专业、规范的智能管理系统',
 };
 
 export default function RootLayout({

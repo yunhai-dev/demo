@@ -27,7 +27,7 @@ export default function Home() {
         <section className="space-y-1">
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">您好，欢迎进入AI知识库系统～</h1>
           <p className="text-slate-400 text-[12px] leading-relaxed max-w-4xl">
-            中国教育科学研究院 AI 知识库系统是一款聚焦教育科研领域的智能知识管理与应用平台，整合三大核心知识库模块，融合 AI 技术赋能高效知识交互。
+            航空工业 AI 知识库系统是一款聚焦行业领域的智能知识管理与应用平台，整合三大核心知识库模块，融合 AI 技术赋能高效知识交互。
           </p>
         </section>
 
@@ -73,7 +73,7 @@ export default function Home() {
               </li>
               <li className="relative before:content-['•'] before:absolute before:-left-4 before:text-slate-300">
                 <span className="font-semibold text-slate-700">AI 智能问答：</span>
-                基于 RAG 架构，通过自然语言提问，高效获取关键信息、解决科研疑问。
+                基于 RAG 架构，通过自然语言提问，高效获取关键信息、解决业务疑问。
               </li>
             </ul>
           </div>

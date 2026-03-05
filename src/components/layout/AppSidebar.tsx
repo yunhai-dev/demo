@@ -30,7 +30,7 @@ export function AppSidebar() {
       <SidebarHeader className="p-4 space-y-4">
         <div className="flex items-center gap-3 px-2">
           <div className="w-7 h-7 rounded-sm bg-[#1E89FF] flex items-center justify-center text-white font-bold text-base">A</div>
-          <span className="font-bold text-[15px] text-[#1D2129] tracking-tight">航空工业教科院</span>
+          <span className="font-bold text-[15px] text-[#1D2129] tracking-tight">航空工业</span>
         </div>
         
         <div className="relative group">
