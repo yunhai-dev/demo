@@ -20,13 +20,13 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSelection } from '@/context/SelectionContext';
 import { cn } from '@/lib/utils';
-import { contextualAIQuestionAnswering } from '@/ai/flows/contextual-ai-question-answering';
 
 interface Message {
   id: string;
   role: 'user' | 'ai';
   content: string;
   recommendedQuestions?: string[];
+  isThinking?: boolean;
 }
 
 const AI_TOOLS = [
@@ -36,6 +36,25 @@ const AI_TOOLS = [
   { icon: Search, label: 'AI 综述', color: 'text-slate-500', mode: 'review' },
   { icon: PieChart, label: 'AI 问数', color: 'text-rose-500', mode: 'data' },
 ];
+
+const MOCK_RESPONSES: Record<string, { content: string; questions: string[] }> = {
+  writing: {
+    content: "已为您生成一份关于‘教育数字化转型’的公文大纲：\n\n1. 背景与意义：当前全球教育竞争的新高地\n2. 总体要求：坚持育人为本，技术赋能\n3. 重点任务：基础设施建设、资源平台优化、素养提升\n4. 保障措施：经费投入与安全防护。\n\n您需要我对其中哪个章节进行详细扩写吗？",
+    questions: ["扩写第三部分“重点任务”", "将大纲转换为PPT演讲稿格式", "增加关于区域差异的分析"]
+  },
+  translation: {
+    content: "Selected text translated to English:\n\n'The profound impact of AI on the modernization of China's education system is reflected in three dimensions: personalized learning, intelligent governance, and teacher empowerment.'\n\n是否需要将结果保存至您的个人知识库？",
+    questions: ["润色为学术论文风格", "翻译为德语版本", "提取其中的核心术语"]
+  },
+  summary: {
+    content: "经过深度阅读，为您总结了本文的核心观点：\n\n- 核心矛盾：传统评价体系与学生全面发展之间的脱节。\n- 解决方案：引入多维度智能评估模型，实现过程性评价。\n- 结论：数字化不是目的，而是实现公平教育的路径。\n\n摘要已为您精简至300字以内。",
+    questions: ["列出文中提到的参考文献", "生成一份核心思维导图", "对比其他同类政策差异"]
+  },
+  default: {
+    content: "这是一个非常深刻的问题。基于中国教育科学研究院的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国教育现代化已进入加速期，特别是针对您关注的领域，最新的政策导向强调了‘高质量均衡发展’。",
+    questions: ["查看相关的政策条文原文", "获取近三年的统计数据对比", "了解在该领域表现突出的示范区"]
+  }
+};
 
 export default function ChatPage() {
   const { count } = useSelection();
@@ -59,35 +78,29 @@ export default function ChatPage() {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: selectedMode ? `[${selectedMode}] ${input}` : input,
+      content: selectedMode ? `[${selectedMode.toUpperCase()}] ${input}` : input,
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input;
+    const currentMode = selectedMode;
     setInput('');
     setIsLoading(true);
 
-    try {
-      const response = await contextualAIQuestionAnswering({
-        question: userMessage.content,
-        context: count > 0 ? ['知识库上下文片段...'] : [],
-      });
-
+    // 模拟 AI 思考过程
+    setTimeout(() => {
+      const responseTemplate = currentMode ? (MOCK_RESPONSES[currentMode] || MOCK_RESPONSES.default) : MOCK_RESPONSES.default;
+      
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'ai',
-        content: response,
-        recommendedQuestions: [
-          '关于该政策的更多解读',
-          '相关的研究报告列表',
-          '如何应用这些数据到我的课题中？'
-        ],
+        content: responseTemplate.content,
+        recommendedQuestions: responseTemplate.questions,
       };
+      
       setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error(error);
-    } finally {
       setIsLoading(false);
-    }
+    }, 2000); // 模拟2秒思考延迟
   };
 
   return (
@@ -131,8 +144,13 @@ export default function ChatPage() {
                   "flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500",
                   m.role === 'user' ? "items-end" : "items-start"
                 )}>
+                  {m.role === 'ai' && (
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                      <span className="text-primary text-[10px] font-black italic">Ai</span>
+                    </div>
+                  )}
                   <div className={cn(
-                    "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5",
+                    "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap",
                     m.role === 'user' 
                       ? "bg-primary text-white ring-primary/20" 
                       : "bg-slate-50 border border-slate-100 text-slate-700"
@@ -160,7 +178,10 @@ export default function ChatPage() {
                             <button 
                               key={rq} 
                               className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
-                              onClick={() => setInput(rq)}
+                              onClick={() => {
+                                setInput(rq);
+                                // 自动触发发送逻辑或提示用户发送
+                              }}
                             >
                               {rq}
                             </button>
@@ -172,10 +193,17 @@ export default function ChatPage() {
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-start gap-4 animate-pulse">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-50 to-indigo-50 flex items-center justify-center text-[10px] text-primary font-black italic border border-primary/10 shadow-sm">AI</div>
-                  <div className="max-w-[70%] p-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-slate-400 text-[13px] font-medium italic">
-                    正在深入分析知识库并为您构建答案...
+                <div className="flex flex-col items-start animate-in fade-in duration-300">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                    <span className="text-primary text-[10px] font-black italic">Ai</span>
+                  </div>
+                  <div className="max-w-[70%] p-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-slate-400 text-[13px] font-medium flex items-center gap-3">
+                    <div className="flex gap-1">
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    正在深度分析并为您构建答案...
                   </div>
                 </div>
               )}
@@ -271,7 +299,7 @@ export default function ChatPage() {
           {AI_TOOLS.map((tool) => (
             <button 
               key={tool.label}
-              onClick={() => setSelectedMode(tool.mode)}
+              onClick={() => setSelectedMode(tool.mode === selectedMode ? null : tool.mode)}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 bg-white border rounded-lg text-[11px] font-bold transition-all shadow-sm whitespace-nowrap active:scale-95 group",
                 selectedMode === tool.mode 
