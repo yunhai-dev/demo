@@ -4,8 +4,8 @@ import { SelectionProvider } from '@/context/SelectionContext';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'EduWisdom AI - 教育科学智能知识管理系统',
-  description: '专业、智能的教育科研与教学资源管理系统',
+  title: '航空工业教科院办公平台', // 遵循 航空工业 + 单位 + 系统名 规范
+  description: '专业、规范的教育科研智能管理系统',
 };
 
 export default function RootLayout({
@@ -18,9 +18,10 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        {/* 使用 Inter 作为 Web 优化字体，视觉上接近规范要求的思源黑体 */}
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased overflow-hidden">
+      <body className="font-body antialiased overflow-hidden text-[14px] leading-[22px]">
         <SelectionProvider>
           {children}
           <Toaster />

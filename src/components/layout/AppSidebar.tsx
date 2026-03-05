@@ -26,22 +26,22 @@ export function AppSidebar() {
   const { count } = useSelection();
 
   return (
-    <Sidebar className="border-r border-border bg-sidebar">
+    <Sidebar className="border-r border-[#DCDFE6] bg-white">
       <SidebarHeader className="p-4 space-y-4">
         <div className="flex items-center gap-3 px-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg">E</div>
-          <span className="font-bold text-lg text-foreground tracking-tight">中国教育科学研究院</span>
+          <div className="w-7 h-7 rounded-sm bg-[#1E89FF] flex items-center justify-center text-white font-bold text-base">A</div>
+          <span className="font-bold text-[15px] text-[#1D2129] tracking-tight">航空工业教科院</span>
         </div>
         
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#A8ABB2]" />
           <Input 
             placeholder="搜索知识库..." 
-            className="pl-9 bg-muted/30 border-none h-9 ring-offset-transparent focus-visible:ring-1 focus-visible:ring-primary/20"
+            className="pl-9 bg-[#F5F7FA] border-none h-8 text-[13px] rounded-sm"
           />
         </div>
 
-        <Button className="w-full bg-primary hover:bg-primary/90 text-white gap-2 h-11 shadow-sm font-medium">
+        <Button className="w-full bg-[#1E89FF] hover:bg-[#006DEA] text-white gap-2 h-9 shadow-none font-medium rounded-sm">
           <Plus className="h-4 w-4" />
           新建知识库
         </Button>
@@ -51,16 +51,16 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/'} tooltip="主页">
-                <Link href="/" className="font-medium">
+              <SidebarMenuButton asChild isActive={pathname === '/'} className="h-9">
+                <Link href="/" className="font-medium text-[#606266]">
                   <Home className="h-4 w-4" />
-                  <span>主页</span>
+                  <span>主页概览</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/chat'} tooltip="AI 对话">
-                <Link href="/chat" className="font-medium">
+              <SidebarMenuButton asChild isActive={pathname === '/chat'} className="h-9">
+                <Link href="/chat" className="font-medium text-[#606266]">
                   <Library className="h-4 w-4" />
                   <span>AI 对话交互</span>
                 </Link>
@@ -70,28 +70,28 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">知识目录</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-4 text-[12px] font-bold text-[#909399] uppercase tracking-wider">知识目录</SidebarGroupLabel>
           <SidebarGroupContent className="px-2 pt-2">
             <div className="space-y-6">
               <div>
-                <div className="flex items-center gap-2 px-2 py-2 text-sm font-semibold text-foreground/70">
-                  <Library className="h-4 w-4 text-primary" />
+                <div className="flex items-center gap-2 px-2 py-1 text-[13px] font-bold text-[#1D2129]">
+                  <Library className="h-4 w-4 text-[#1E89FF]" />
                   <span>机构知识库</span>
                 </div>
                 <KnowledgeTree nodes={INSTITUTIONAL_KNOWLEDGE} />
               </div>
 
               <div>
-                <div className="flex items-center gap-2 px-2 py-2 text-sm font-semibold text-foreground/70">
-                  <Share2 className="h-4 w-4 text-primary" />
+                <div className="flex items-center gap-2 px-2 py-1 text-[13px] font-bold text-[#1D2129]">
+                  <Share2 className="h-4 w-4 text-[#1E89FF]" />
                   <span>共享知识库</span>
                 </div>
                 <KnowledgeTree nodes={SHARED_KNOWLEDGE} />
               </div>
 
               <div>
-                <div className="flex items-center gap-2 px-2 py-2 text-sm font-semibold text-foreground/70">
-                  <Folder className="h-4 w-4 text-primary" />
+                <div className="flex items-center gap-2 px-2 py-1 text-[13px] font-bold text-[#1D2129]">
+                  <Folder className="h-4 w-4 text-[#1E89FF]" />
                   <span>我的知识库</span>
                 </div>
                 <KnowledgeTree nodes={PERSONAL_KNOWLEDGE} />
@@ -101,10 +101,10 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <div className="p-4 mt-auto border-t border-border bg-muted/20">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>上下文状态</span>
-          <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">已选 {count} 项</span>
+      <div className="p-4 mt-auto border-t border-[#DCDFE6] bg-[#FAFAFA]">
+        <div className="flex items-center justify-between text-[12px] text-[#909399]">
+          <span>状态：运行中</span>
+          <span className="bg-[#EBF4FF] text-[#1E89FF] px-2 py-0.5 rounded-sm font-bold">已选 {count}</span>
         </div>
       </div>
     </Sidebar>
