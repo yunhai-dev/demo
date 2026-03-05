@@ -13,7 +13,8 @@ import {
   Search, 
   PieChart, 
   ChevronDown,
-  X
+  X,
+  Paperclip
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -101,21 +102,21 @@ export default function ChatPage() {
       >
         <div className={cn(
           "w-full transition-all duration-500",
-          isEmpty ? "max-w-3xl space-y-8" : "max-w-3xl mx-auto p-6 space-y-8"
+          isEmpty ? "max-w-3xl flex flex-col items-center justify-center min-h-full space-y-8" : "max-w-3xl mx-auto p-6 space-y-8"
         )}>
           {isEmpty ? (
             /* Empty State: Centered Welcome Section */
-            <div className="flex flex-col items-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+            <div className="flex flex-col items-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 w-full">
               <div className="relative group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3">
-                  <span className="text-white text-xl font-black tracking-tighter italic">Ai</span>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3">
+                  <span className="text-white text-lg font-black tracking-tighter italic">Ai</span>
                 </div>
                 <div className="absolute -inset-2 rounded-2xl bg-blue-500/10 blur-md -z-10 animate-pulse" />
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-xl font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
-                <p className="text-slate-400 text-[12px] font-medium">请从左侧选择知识库或直接向我提问</p>
+                <h2 className="text-lg font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
+                <p className="text-slate-400 text-[11px] font-medium">请从左侧选择知识库或直接向我提问</p>
               </div>
 
               <div className="w-full">
@@ -158,7 +159,7 @@ export default function ChatPage() {
                           {m.recommendedQuestions.map((rq) => (
                             <button 
                               key={rq} 
-                              className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[12px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
+                              className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
                               onClick={() => setInput(rq)}
                             >
                               {rq}
@@ -204,7 +205,7 @@ export default function ChatPage() {
           {selectedMode && (
             <div className="flex items-center px-5 pt-3">
               <div className="flex items-center gap-2 px-2 py-0.5 bg-primary/5 border border-primary/15 rounded-md animate-in zoom-in-95 duration-200">
-                <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
+                <span className="text-[9px] font-bold text-primary uppercase tracking-wider">
                   {AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式
                 </span>
                 <button 
@@ -235,7 +236,7 @@ export default function ChatPage() {
           
           {/* Input Footer Bar */}
           <div className="flex items-center justify-between px-5 pb-4 pt-1">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -243,6 +244,14 @@ export default function ChatPage() {
               >
                 已选 {count} 项
                 <ChevronDown className="h-3 w-3 ml-1 opacity-60" />
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-7 w-7 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+              >
+                <Paperclip className="h-4 w-4" />
               </Button>
             </div>
 
