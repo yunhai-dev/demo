@@ -15,7 +15,8 @@ import {
   Paperclip,
   Brain,
   ChevronRight,
-  ChevronDown
+  ChevronDown,
+  SendHorizontal
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -133,27 +134,26 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white font-body relative overflow-hidden">
+    <div className="relative h-full flex flex-col bg-white overflow-hidden">
       {/* 消息滚动区域 */}
       <div 
         ref={scrollRef}
         className={cn(
-          "flex-1 overflow-y-auto scroll-smooth",
-          isEmpty ? "flex items-center justify-center p-6" : "p-6"
+          "absolute inset-0 overflow-y-auto scroll-smooth",
+          isEmpty ? "flex items-center justify-center" : "pt-6 pb-[280px]" // 底部留出输入框空间
         )}
       >
         <div className={cn(
-          "w-full mx-auto",
-          isEmpty ? "max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000" : "max-w-3xl space-y-10"
+          "w-full mx-auto px-6",
+          isEmpty ? "max-w-2xl" : "max-w-3xl space-y-12"
         )}>
           {isEmpty ? (
-            /* 初始状态：居中内容 */
-            <div className="flex flex-col items-center text-center space-y-8 w-full">
+            /* 初始居中引导 */
+            <div className="flex flex-col items-center text-center space-y-8 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
               <div className="relative">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 flex items-center justify-center shadow-xl border border-white/20">
-                  <span className="text-white text-2xl font-black tracking-tighter italic">Ai</span>
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 flex items-center justify-center shadow-xl">
+                  <span className="text-white text-2xl font-black italic">Ai</span>
                 </div>
-                <div className="absolute -inset-3 rounded-3xl bg-blue-500/10 blur-xl -z-10 animate-pulse" />
               </div>
 
               <div className="space-y-2">
@@ -164,22 +164,22 @@ export default function ChatPage() {
               {renderInputArea()}
             </div>
           ) : (
-            /* 对话历史 */
-            <div className="space-y-10">
+            /* 对话列表 */
+            <div className="space-y-12 pb-10">
               {messages.map((m) => (
                 <div key={m.id} className={cn(
-                  "flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500",
-                  m.role === 'user' ? "items-end" : "items-start"
+                  "flex animate-in fade-in slide-in-from-bottom-4 duration-500",
+                  m.role === 'user' ? "justify-end" : "justify-start gap-4"
                 )}>
                   {m.role === 'ai' && (
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600/10 to-indigo-700/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shadow-sm">
                       <span className="text-primary text-[11px] font-black italic">Ai</span>
                     </div>
                   )}
 
-                  <div className="w-full space-y-4">
+                  <div className={cn("flex flex-col gap-4", m.role === 'user' ? "items-end max-w-[85%]" : "max-w-[85%]")}>
                     {m.role === 'ai' && m.thought && (
-                      <div className="ml-1 max-w-[95%] border-l-2 border-slate-100 pl-4 py-1">
+                      <div className="w-full border-l-2 border-slate-100 pl-4 py-1">
                         <Collapsible defaultOpen={true}>
                           <CollapsibleTrigger className="flex items-center gap-2 text-[11px] font-bold text-slate-400 hover:text-primary transition-colors mb-2 group">
                             <Brain className="h-3.5 w-3.5 text-slate-300 group-hover:text-primary" />
@@ -187,7 +187,7 @@ export default function ChatPage() {
                             <ChevronRight className="h-3 w-3 transition-transform data-[state=open]:rotate-90" />
                           </CollapsibleTrigger>
                           <CollapsibleContent>
-                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
+                            <div className="text-[13px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
                               {m.thought}
                             </div>
                           </CollapsibleContent>
@@ -196,53 +196,59 @@ export default function ChatPage() {
                     )}
 
                     <div className={cn(
-                      "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap transition-all",
+                      "p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap",
                       m.role === 'user' 
-                        ? "bg-primary text-white ring-primary/20 float-right ml-auto" 
+                        ? "bg-primary text-white ring-primary/20" 
                         : "bg-white border border-slate-100 text-slate-700"
                     )}>
                       {m.content}
                       {m.isTyping && (
-                        <span className="inline-block w-1 h-4 ml-1 bg-primary/40 animate-pulse align-middle" />
+                        <span className="inline-block w-1.5 h-4 ml-1 bg-primary/40 animate-pulse align-middle" />
                       )}
                     </div>
-                  </div>
-                  
-                  {m.role === 'ai' && !m.isTyping && (
-                    <div className="mt-4 flex flex-col gap-4 w-full animate-in fade-in slide-in-from-top-2 duration-700">
-                      <div className="flex items-center gap-1.5 ml-1">
-                        {[RotateCcw, Copy, ThumbsUp, ThumbsDown].map((Icon, i) => (
-                          <Button 
-                            key={i}
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg"
-                          >
-                            <Icon className="h-4 w-4" />
-                          </Button>
-                        ))}
-                      </div>
-                      {m.recommendedQuestions && (
-                        <div className="flex flex-wrap gap-2">
-                          {m.recommendedQuestions.map((rq) => (
-                            <button 
-                              key={rq} 
-                              className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
-                              onClick={() => setInput(rq)}
+
+                    {m.role === 'ai' && !m.isTyping && (
+                      <div className="flex flex-col gap-4 w-full animate-in fade-in slide-in-from-top-2 duration-700">
+                        <div className="flex items-center gap-1">
+                          {[RotateCcw, Copy, ThumbsUp, ThumbsDown].map((Icon, i) => (
+                            <Button 
+                              key={i}
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-lg"
                             >
-                              {rq}
-                            </button>
+                              <Icon className="h-4 w-4" />
+                            </Button>
                           ))}
                         </div>
-                      )}
+                        {m.recommendedQuestions && (
+                          <div className="flex flex-wrap gap-2">
+                            {m.recommendedQuestions.map((rq) => (
+                              <button 
+                                key={rq} 
+                                className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
+                                onClick={() => setInput(rq)}
+                              >
+                                {rq}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {m.role === 'user' && (
+                    <div className="shrink-0 ml-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-[11px] font-bold shadow-md">
+                      1
                     </div>
                   )}
                 </div>
               ))}
               
               {isLoading && (
-                <div className="flex flex-col items-start animate-in fade-in duration-300">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600/10 to-indigo-700/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                <div className="flex gap-4 animate-in fade-in duration-300">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
                     <span className="text-primary text-[11px] font-black italic">Ai</span>
                   </div>
                   <div className="max-w-[70%] p-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-slate-400 text-[13px] font-medium flex items-center gap-3">
@@ -251,7 +257,7 @@ export default function ChatPage() {
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                    正在进行逻辑推理...
+                    正在深度思考并为您构建逻辑链...
                   </div>
                 </div>
               )}
@@ -262,8 +268,8 @@ export default function ChatPage() {
 
       {/* 固定底部输入区域 */}
       {!isEmpty && (
-        <div className="shrink-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.02)] z-10">
-          <div className="max-w-3xl mx-auto">
+        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-white via-white to-transparent pointer-events-none z-20">
+          <div className="max-w-3xl mx-auto pointer-events-auto">
             {renderInputArea()}
           </div>
         </div>
@@ -274,7 +280,7 @@ export default function ChatPage() {
   function renderInputArea() {
     return (
       <div className="w-full space-y-4">
-        <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] focus-within:border-primary/40 focus-within:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.08)] transition-all duration-300 overflow-hidden">
+        <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.1)] focus-within:border-primary/40 focus-within:shadow-[0_12px_48px_-8px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden">
           
           {selectedMode && (
             <div className="flex items-center px-5 pt-3">
@@ -297,7 +303,7 @@ export default function ChatPage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下提问...` : "请输入您的问题..."}
             className={cn(
-              "min-h-[100px] max-h-[300px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300",
+              "min-h-[80px] max-h-[200px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300",
               selectedMode ? "pt-1 pb-3" : "py-4"
             )}
             onKeyDown={(e) => {
@@ -332,9 +338,10 @@ export default function ChatPage() {
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
               size="sm" 
-              className="bg-primary hover:bg-primary/95 text-white rounded-xl h-9 px-6 text-[12px] font-bold transition-all shadow-lg shadow-primary/20 active:scale-95 disabled:shadow-none"
+              className="bg-primary hover:bg-primary/95 text-white rounded-xl h-9 px-4 flex items-center gap-2 text-[12px] font-bold transition-all shadow-lg shadow-primary/20 active:scale-95"
             >
               发送
+              <SendHorizontal className="h-4 w-4" />
             </Button>
           </div>
         </div>
