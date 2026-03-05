@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Send, 
   RotateCcw, 
   Copy, 
   ThumbsUp, 
@@ -12,11 +11,11 @@ import {
   FileText, 
   Search, 
   PieChart, 
-  ChevronDown,
   X,
   Paperclip,
   Brain,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -44,23 +43,23 @@ const AI_TOOLS = [
 
 const MOCK_RESPONSES: Record<string, { thought: string; content: string; questions: string[] }> = {
   writing: {
-    thought: "用户要求生成关于‘教育数字化转型’的公文大纲。首先，我需要明确公文的规范格式，通常包括背景、目标、任务和保障。其次，结合当前教育数字化的热点，如‘国家教育数字化战略行动’。我计划将重点放在‘人工智能赋能’和‘高质量均衡’两个维度。最后，检查语言风格，确保严谨、专业且具有指导性。",
+    thought: "用户要求生成关于‘教育数字化转型’的公文大纲。首先，我需要明确公文的规范格式，通常包括背景、目标、任务和保障。其次，结合当前教育数字化的热点。我计划将重点放在‘人工智能赋能’和‘高质量均衡’两个维度。最后，检查语言风格，确保严谨专业。",
     content: "已为您生成一份关于‘教育数字化转型’的公文大纲：\n\n1. 背景与意义：当前全球教育竞争的新高地\n2. 总体要求：坚持育人为本，技术赋能\n3. 重点任务：基础设施建设、资源平台优化、素养提升\n4. 保障措施：经费投入与安全防护。\n\n您需要我对其中哪个章节进行详细扩写吗？",
     questions: ["扩写第三部分“重点任务”", "将大纲转换为PPT演讲稿格式", "增加关于区域差异的分析"]
   },
   translation: {
-    thought: "输入文本涉及‘人工智能对中国教育现代化’的影响。翻译时需注意专业术语的准确性，如‘personalized learning’（个性化学习）和‘teacher empowerment’（教师赋能）。语境为正式学术讨论，因此词汇选择应偏向书面语。我将采用地道的学术英语表达方式，确保逻辑衔接自然。",
+    thought: "输入文本涉及‘人工智能对中国教育现代化’的影响。翻译时需注意专业术语的准确性。语境为正式学术讨论，因此词汇选择应偏向书面语。我将采用地道的学术英语表达方式，确保逻辑衔接自然。",
     content: "Selected text translated to English:\n\n'The profound impact of AI on the modernization of China's education system is reflected in three dimensions: personalized learning, intelligent governance, and teacher empowerment.'\n\n是否需要将结果保存至您的个人知识库？",
     questions: ["润色为学术论文风格", "翻译为德语版本", "提取其中的核心术语"]
   },
   summary: {
-    thought: "这是一篇关于教育评价体系的政策文本。核心观点在于‘破五唯’后的新评价标准。我需要提取文中的主要矛盾点，并整理出具体的数字化解决方案。考虑到用户可能需要快速决策，摘要应采用列表形式，突出核心结论。同时，确保字数在300字以内以符合‘精简’的要求。",
+    thought: "这是一篇关于教育评价体系的政策文本。核心观点在于‘破五唯’后的新评价标准。我需要提取文中的主要矛盾点，并整理出具体的数字化解决方案。摘要应采用列表形式，突出核心结论。",
     content: "经过深度阅读，为您总结了本文的核心观点：\n\n- 核心矛盾：传统评价体系与学生全面发展之间的脱节。\n- 解决方案：引入多维度智能评估模型，实现过程性评价。\n- 结论：数字化不是目的，而是实现公平教育的路径。\n\n摘要已为您精简至300字以内。",
     questions: ["列出文中提到的参考文献", "生成一份核心思维导图", "对比其他同类政策差异"]
   },
   default: {
-    thought: "用户提出了一个开放性的教育领域问题。我将从中国教育科学研究院的权威视角出发，首先检索相关的政策文件库（如‘十四五’教育规划）。接着，分析当前教育现代化的主要瓶颈和发展阶段。我需要给出一个既有宏观高度，又有微观案例支撑的回答，确保其权威性和可操作性。",
-    content: "这是一个非常深刻的问题。基于中国教育科学研究院的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国教育现代化已进入加速期，特别是针对您关注的领域，最新的政策导向强调了‘高质量均衡发展’。",
+    thought: "用户提出了一个开放性的教育领域问题。我将从中国教育科学研究院的权威视角出发，首先检索相关的政策文件库。接着，分析当前教育现代化的主要瓶颈和发展阶段。我需要给出一个既有宏观高度，又有微观案例支撑的回答。",
+    content: "这是一个非常深刻的问题。基于中国教育科学研究院的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国教育现代化已进入加速期，特别是针对您关注的领域。",
     questions: ["查看相关的政策条文原文", "获取近三年的统计数据对比", "了解在该领域表现突出的示范区"]
   }
 };
@@ -96,6 +95,7 @@ export default function ChatPage() {
     setInput('');
     setIsLoading(true);
 
+    // 模拟 AI 响应
     setTimeout(() => {
       const responseTemplate = currentMode ? (MOCK_RESPONSES[currentMode] || MOCK_RESPONSES.default) : MOCK_RESPONSES.default;
       
@@ -128,42 +128,40 @@ export default function ChatPage() {
             m.id === aiMessageId ? { ...m, isTyping: false } : m
           ));
         }
-      }, 30);
-    }, 2000); 
+      }, 25);
+    }, 1500); 
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative overflow-hidden font-body">
-      {/* 消息展示区域 */}
+    <div className="flex flex-col h-full bg-white font-body relative overflow-hidden">
+      {/* 消息滚动区域 */}
       <div 
         ref={scrollRef}
         className={cn(
-          "flex-1 overflow-y-auto scroll-smooth transition-all duration-500 relative",
-          isEmpty ? "flex flex-col items-center justify-center" : "pb-[200px]"
+          "flex-1 overflow-y-auto scroll-smooth",
+          isEmpty ? "flex items-center justify-center p-6" : "p-6"
         )}
       >
         <div className={cn(
-          "w-full px-6 py-8",
-          isEmpty ? "max-w-3xl animate-in fade-in slide-in-from-bottom-6 duration-1000" : "max-w-3xl mx-auto space-y-10"
+          "w-full mx-auto",
+          isEmpty ? "max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000" : "max-w-3xl space-y-10"
         )}>
           {isEmpty ? (
-            /* 初始状态：居中引导 */
+            /* 初始状态：居中内容 */
             <div className="flex flex-col items-center text-center space-y-8 w-full">
-              <div className="relative group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3 border border-white/20">
-                  <span className="text-white text-xl font-black tracking-tighter italic">Ai</span>
+              <div className="relative">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 flex items-center justify-center shadow-xl border border-white/20">
+                  <span className="text-white text-2xl font-black tracking-tighter italic">Ai</span>
                 </div>
-                <div className="absolute -inset-2 rounded-2xl bg-blue-500/10 blur-md -z-10 animate-pulse" />
+                <div className="absolute -inset-3 rounded-3xl bg-blue-500/10 blur-xl -z-10 animate-pulse" />
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-xl font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
-                <p className="text-slate-400 text-[12px] font-medium">请从下方选择模式或直接输入问题</p>
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
+                <p className="text-slate-400 text-sm font-medium">请从下方选择模式或直接输入问题开始对话</p>
               </div>
 
-              <div className="w-full">
-                {renderInputArea()}
-              </div>
+              {renderInputArea()}
             </div>
           ) : (
             /* 对话历史 */
@@ -174,23 +172,22 @@ export default function ChatPage() {
                   m.role === 'user' ? "items-end" : "items-start"
                 )}>
                   {m.role === 'ai' && (
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600/10 to-indigo-700/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
                       <span className="text-primary text-[11px] font-black italic">Ai</span>
                     </div>
                   )}
 
                   <div className="w-full space-y-4">
-                    {/* 思维链展示 */}
                     {m.role === 'ai' && m.thought && (
-                      <div className="ml-1 max-w-[90%] border-l-2 border-slate-200 pl-4 py-1">
+                      <div className="ml-1 max-w-[95%] border-l-2 border-slate-100 pl-4 py-1">
                         <Collapsible defaultOpen={true}>
                           <CollapsibleTrigger className="flex items-center gap-2 text-[11px] font-bold text-slate-400 hover:text-primary transition-colors mb-2 group">
-                            <Brain className="h-3.5 w-3.5 text-slate-300 group-hover:text-primary animate-pulse" />
+                            <Brain className="h-3.5 w-3.5 text-slate-300 group-hover:text-primary" />
                             <span>深度思考过程</span>
                             <ChevronRight className="h-3 w-3 transition-transform data-[state=open]:rotate-90" />
                           </CollapsibleTrigger>
                           <CollapsibleContent>
-                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
                               {m.thought}
                             </div>
                           </CollapsibleContent>
@@ -198,12 +195,11 @@ export default function ChatPage() {
                       </div>
                     )}
 
-                    {/* 消息气泡 */}
                     <div className={cn(
                       "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap transition-all",
                       m.role === 'user' 
                         ? "bg-primary text-white ring-primary/20 float-right ml-auto" 
-                        : "bg-white border border-slate-100 text-slate-700 clear-both"
+                        : "bg-white border border-slate-100 text-slate-700"
                     )}>
                       {m.content}
                       {m.isTyping && (
@@ -212,7 +208,6 @@ export default function ChatPage() {
                     </div>
                   </div>
                   
-                  {/* AI 回复后的操作建议 */}
                   {m.role === 'ai' && !m.isTyping && (
                     <div className="mt-4 flex flex-col gap-4 w-full animate-in fade-in slide-in-from-top-2 duration-700">
                       <div className="flex items-center gap-1.5 ml-1">
@@ -245,10 +240,9 @@ export default function ChatPage() {
                 </div>
               ))}
               
-              {/* 思考中状态 */}
               {isLoading && (
                 <div className="flex flex-col items-start animate-in fade-in duration-300">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600/10 to-indigo-700/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
                     <span className="text-primary text-[11px] font-black italic">Ai</span>
                   </div>
                   <div className="max-w-[70%] p-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-slate-400 text-[13px] font-medium flex items-center gap-3">
@@ -257,7 +251,7 @@ export default function ChatPage() {
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                    正在深度思考并为您构建逻辑链...
+                    正在进行逻辑推理...
                   </div>
                 </div>
               )}
@@ -266,9 +260,9 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* 固定底部的输入栏（仅在非空时显示） */}
+      {/* 固定底部输入区域 */}
       {!isEmpty && (
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100/50 shadow-[0_-8px_30px_rgba(0,0,0,0.03)] z-10 animate-in slide-in-from-bottom-full duration-700">
+        <div className="shrink-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.02)] z-10">
           <div className="max-w-3xl mx-auto">
             {renderInputArea()}
           </div>
@@ -280,13 +274,11 @@ export default function ChatPage() {
   function renderInputArea() {
     return (
       <div className="w-full space-y-4">
-        {/* 输入框主容器 */}
-        <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] focus-within:border-primary/50 focus-within:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden">
+        <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] focus-within:border-primary/40 focus-within:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.08)] transition-all duration-300 overflow-hidden">
           
-          {/* 模式显示标签 */}
           {selectedMode && (
             <div className="flex items-center px-5 pt-3">
-              <div className="flex items-center gap-2 px-2 py-0.5 bg-primary/5 border border-primary/15 rounded-md animate-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-2 px-2 py-0.5 bg-primary/5 border border-primary/10 rounded-md">
                 <span className="text-[9px] font-bold text-primary uppercase tracking-wider">
                   {AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式
                 </span>
@@ -305,7 +297,7 @@ export default function ChatPage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下提问...` : "请输入您的问题..."}
             className={cn(
-              "min-h-[90px] max-h-[250px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300 transition-all",
+              "min-h-[100px] max-h-[300px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300",
               selectedMode ? "pt-1 pb-3" : "py-4"
             )}
             onKeyDown={(e) => {
@@ -316,13 +308,12 @@ export default function ChatPage() {
             }}
           />
           
-          {/* 输入框底部工具栏 */}
           <div className="flex items-center justify-between px-5 pb-4 pt-1">
             <div className="flex items-center gap-3">
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-8 px-3 rounded-lg bg-blue-50 text-primary hover:bg-blue-100 text-[10px] font-bold border border-blue-100 shadow-sm transition-all"
+                className="h-8 px-3 rounded-lg bg-blue-50 text-primary hover:bg-blue-100 text-[10px] font-bold border border-blue-100/50 shadow-sm"
               >
                 已选 {count} 项
                 <ChevronDown className="h-3 w-3 ml-1 opacity-60" />
@@ -348,14 +339,13 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* 模式选择按钮组 */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto scrollbar-hide py-1 px-4">
+        <div className="flex items-center justify-center gap-2 flex-wrap px-4">
           {AI_TOOLS.map((tool) => (
             <button 
               key={tool.label}
               onClick={() => setSelectedMode(tool.mode === selectedMode ? null : tool.mode)}
               className={cn(
-                "flex items-center gap-2 px-3.5 py-2 bg-white border rounded-lg text-[11px] font-bold transition-all shadow-sm whitespace-nowrap active:scale-95 group",
+                "flex items-center gap-2 px-3 py-1.5 bg-white border rounded-lg text-[11px] font-bold transition-all shadow-sm active:scale-95 group",
                 selectedMode === tool.mode 
                   ? "border-primary/30 bg-primary/5 text-primary ring-1 ring-primary/10" 
                   : "border-slate-100 text-slate-600 hover:border-primary/20 hover:text-primary"
