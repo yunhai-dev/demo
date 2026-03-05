@@ -31,6 +31,7 @@ interface Message {
   thought?: string;
   recommendedQuestions?: string[];
   isThinking?: boolean;
+  isTyping?: boolean; // 新增：标识是否正在打印中
 }
 
 const AI_TOOLS = [
@@ -95,21 +96,42 @@ export default function ChatPage() {
     setInput('');
     setIsLoading(true);
 
-    // 模拟 AI 思考过程
+    // 1. 模拟 AI 思考过程
     setTimeout(() => {
       const responseTemplate = currentMode ? (MOCK_RESPONSES[currentMode] || MOCK_RESPONSES.default) : MOCK_RESPONSES.default;
       
+      const aiMessageId = (Date.now() + 1).toString();
       const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: aiMessageId,
         role: 'ai',
         thought: responseTemplate.thought,
-        content: responseTemplate.content,
+        content: '', // 初始内容为空，用于打字机效果
         recommendedQuestions: responseTemplate.questions,
+        isTyping: true,
       };
       
       setMessages((prev) => [...prev, aiMessage]);
       setIsLoading(false);
-    }, 2500); // 模拟稍长的思考延迟以展示思维链的重要性
+
+      // 2. 实现打字机效果
+      let fullText = responseTemplate.content;
+      let currentIndex = 0;
+      
+      const interval = setInterval(() => {
+        if (currentIndex < fullText.length) {
+          const char = fullText[currentIndex];
+          setMessages(prev => prev.map(m => 
+            m.id === aiMessageId ? { ...m, content: m.content + char } : m
+          ));
+          currentIndex++;
+        } else {
+          clearInterval(interval);
+          setMessages(prev => prev.map(m => 
+            m.id === aiMessageId ? { ...m, isTyping: false } : m
+          ));
+        }
+      }, 30); // 打字速度：每 30 毫秒一个字
+    }, 2500); 
   };
 
   return (
@@ -119,7 +141,7 @@ export default function ChatPage() {
         ref={scrollRef}
         className={cn(
           "flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 transition-all duration-500",
-          isEmpty ? "flex flex-col items-center justify-center p-6" : "pb-40"
+          isEmpty ? "flex flex-col items-center justify-center p-6" : "pb-44"
         )}
       >
         <div className={cn(
@@ -180,17 +202,21 @@ export default function ChatPage() {
 
                     {/* Message Content */}
                     <div className={cn(
-                      "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap",
+                      "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap transition-all",
                       m.role === 'user' 
                         ? "bg-primary text-white ring-primary/20 float-right ml-auto" 
                         : "bg-white border border-slate-100 text-slate-700 clear-both"
                     )}>
                       {m.content}
+                      {m.isTyping && (
+                        <span className="inline-block w-1 h-4 ml-1 bg-primary/40 animate-pulse align-middle" />
+                      )}
                     </div>
                   </div>
                   
-                  {m.role === 'ai' && (
-                    <div className="mt-4 flex flex-col gap-4 w-full">
+                  {/* Footer actions and recommended questions (only show after typing is done) */}
+                  {m.role === 'ai' && !m.isTyping && (
+                    <div className="mt-4 flex flex-col gap-4 w-full animate-in fade-in slide-in-from-top-2 duration-700">
                       <div className="flex items-center gap-1.5 ml-1">
                         {[RotateCcw, Copy, ThumbsUp, ThumbsDown].map((Icon, i) => (
                           <Button 
