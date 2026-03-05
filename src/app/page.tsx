@@ -1,75 +1,72 @@
 import React from 'react';
 import { WelcomeBanner } from '@/components/dashboard/WelcomeBanner';
 import { Button } from '@/components/ui/button';
-import { Plane, Settings2, ChevronRight, Sparkles, Database, ShieldCheck, Factory } from 'lucide-react';
+import { BookOpen, School, ChevronRight, Sparkles, Database, GraduationCap, Library } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full bg-[#F8FAFC] flex flex-col">
-      {/* Top Section: Hero & Header Info */}
-      <div className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+    <div className="h-screen w-full bg-[#F8FAFC] flex flex-col overflow-hidden">
+      {/* Direct Content Layout - No outer Card wrapper */}
+      <div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-8 py-6 gap-6">
+        
+        {/* Banner Section */}
+        <section className="flex-none">
           <WelcomeBanner />
-        </div>
-      </div>
+        </section>
 
-      {/* Middle Section: Core Knowledge Bases */}
-      <div className="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Aviation Standards */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 transition-all hover:shadow-md group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-blue-600 bg-blue-50 p-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <ShieldCheck className="h-6 w-6" />
+        {/* Knowledge Modules - Direct Display */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all hover:shadow-lg group">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="text-primary bg-primary/10 p-2.5 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors">
+                <GraduationCap className="h-6 w-6" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">航空标准库</h2>
+              <h2 className="text-lg font-bold text-slate-900">政策文件库</h2>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              收录国内外航空制造标准 (NAS, AS9100)、适航法规及质量体系文件，确保所有生产环节高度合规。
+              全面收录国家及各省市教育政策、法律法规、行业标准及改革方案，为科研与管理提供权威参考。
             </p>
           </div>
 
-          {/* Process Engineering */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 transition-all hover:shadow-md group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-blue-600 bg-blue-50 p-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <Settings2 className="h-6 w-6" />
+          <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all hover:shadow-lg group">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="text-primary bg-primary/10 p-2.5 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors">
+                <School className="h-6 w-6" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">工艺规程库</h2>
+              <h2 className="text-lg font-bold text-slate-900">教学资源库</h2>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              沉淀关键零件制造工艺、复合材料铺叠流程及特种工艺参数，赋能数字化车间一线生产。
+              整合精品课件、教学案例、多媒体素材及优质教案，支持跨学科资源沉淀，助力教师卓越教学。
             </p>
           </div>
 
-          {/* Research & Models */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-300 transition-all hover:shadow-md group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-blue-600 bg-blue-50 p-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <Database className="h-6 w-6" />
+          <div className="flex flex-col p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all hover:shadow-lg group">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="text-primary bg-primary/10 p-2.5 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors">
+                <BookOpen className="h-6 w-6" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">科研型号库</h2>
+              <h2 className="text-lg font-bold text-slate-900">科研成果库</h2>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              整合历史机型研发数据、强度试验报告及改进方案，助力跨型号技术创新与知识复用。
+              汇聚历年学术论文、课题报告、教育调查报告及科研专利，促进知识复用与重大学术创新。
             </p>
           </div>
-        </div>
+        </section>
 
-        {/* CTA Banner */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-8 text-white shadow-xl">
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-10">
-            <Factory className="h-64 w-64" />
+        {/* AI Action Section - Compact CTA */}
+        <section className="mt-auto mb-4 relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl">
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 opacity-10">
+            <Library className="h-64 w-64" />
           </div>
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-3 text-center md:text-left">
-              <h3 className="text-2xl font-black flex items-center justify-center md:justify-start gap-3">
+            <div className="space-y-2">
+              <h3 className="text-2xl font-black flex items-center gap-3">
                 <Sparkles className="h-6 w-6 text-blue-300 fill-current" />
-                领航智库 AI 引擎
+                EduWisdom AI 智库引擎
               </h3>
-              <p className="text-blue-100 max-w-2xl text-base opacity-90 font-medium leading-relaxed">
-                基于航空制造专属大模型的 RAG 架构，实现毫秒级技术文档检索与精准问答，辅助工程师快速决策。
+              <p className="text-blue-100 max-w-2xl text-sm font-medium opacity-90 leading-relaxed">
+                深度整合教育垂直领域知识，通过 RAG 技术实现毫秒级精准问答、自动摘要及深度综述，赋能每一位教育工作者。
               </p>
             </div>
             <div className="flex gap-4 shrink-0">
@@ -80,23 +77,23 @@ export default function Home() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 rounded-xl px-8 h-14 font-bold">
-                操作手册
+                新手指引
               </Button>
             </div>
           </div>
-        </div>
+        </section>
       </div>
-      
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400 font-bold uppercase tracking-widest">
+
+      {/* Simplified Footer */}
+      <footer className="bg-white border-t border-slate-200 py-4 flex-none px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
           <div className="flex items-center gap-2">
-            <Plane className="h-4 w-4 text-blue-600" />
-            <span>PilotMind AI Enterprise v2.5</span>
+            <Database className="h-3 w-3 text-primary" />
+            <span>EduWisdom AI System v3.0</span>
           </div>
-          <div className="flex gap-8">
-            <span>© 2024 中国航空制造技术研究院 (AVIC MTI)</span>
-            <span className="hidden sm:inline px-3 py-1 bg-red-50 text-red-600 rounded-md">安全级别：机密级 (L3)</span>
+          <div className="flex gap-6">
+            <span>© 2024 中国教育科学研究院 (NIES)</span>
+            <span className="hidden sm:inline px-2 py-0.5 bg-blue-50 text-primary rounded border border-blue-100">机密等级：内部公开</span>
           </div>
         </div>
       </footer>

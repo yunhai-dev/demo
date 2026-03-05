@@ -4,8 +4,8 @@ import { SelectionProvider } from '@/context/SelectionContext';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: '领航智库 AI - 航空制造智能知识管理系统',
-  description: '专业、智能的航空制造科研与工程知识库',
+  title: 'EduWisdom AI - 教育科学智能知识管理系统',
+  description: '专业、智能的教育科研与教学资源管理系统',
 };
 
 export default function RootLayout({

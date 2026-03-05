@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "banner-illustration",
-      "description": "Futuristic aviation manufacturing factory and aerospace engineering concept",
-      "imageUrl": "https://picsum.photos/seed/aviation-ai/1200/400",
-      "imageHint": "aviation manufacturing"
+      "description": "Professional educational environment and digital library concept",
+      "imageUrl": "https://picsum.photos/seed/edu-ai/1200/400",
+      "imageHint": "educational library"
     }
   ]
 }
