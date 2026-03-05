@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/AppSidebar';
-import { TopNav } from '@/components/layout/TopNav';
 import { SelectionProvider } from '@/context/SelectionContext';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -23,20 +20,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body">
+      <body className="font-body antialiased">
         <SelectionProvider>
-          <SidebarProvider>
-            <div className="flex min-h-screen w-full">
-              <AppSidebar />
-              <SidebarInset className="flex flex-col flex-1 min-w-0 bg-background overflow-hidden">
-                <TopNav />
-                <main className="flex-1 overflow-auto">
-                  {children}
-                </main>
-              </SidebarInset>
-            </div>
-            <Toaster />
-          </SidebarProvider>
+          {children}
+          <Toaster />
         </SelectionProvider>
       </body>
     </html>
