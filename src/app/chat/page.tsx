@@ -2,8 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Mic, 
-  Upload, 
   Send, 
   RotateCcw, 
   Copy, 
@@ -246,13 +244,6 @@ export default function ChatPage() {
                 已选 {count} 项
                 <ChevronDown className="h-3 w-3 ml-1 opacity-60" />
               </Button>
-              <div className="h-3 w-[1px] bg-slate-100 mx-1" />
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all rounded-md active:scale-90">
-                <Mic className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all rounded-md active:scale-90">
-                <Upload className="h-4 w-4" />
-              </Button>
             </div>
 
             <Button 
@@ -262,7 +253,6 @@ export default function ChatPage() {
               className="bg-primary hover:bg-primary/95 text-white rounded-xl h-8 px-5 text-[12px] font-bold transition-all shadow-lg shadow-primary/20 active:scale-95 disabled:shadow-none"
             >
               发送
-              <Send className="h-3 w-3 ml-2" />
             </Button>
           </div>
         </div>
