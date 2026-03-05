@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Bell, User, Settings, LogOut, UserCircle, Search, HelpCircle } from 'lucide-react';
+import { Bell, User, Settings, LogOut, UserCircle, HelpCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 
 export function TopNav() {
   return (
@@ -23,20 +22,9 @@ export function TopNav() {
         <Badge className="bg-[#FE8624] hover:bg-[#FE8624] text-white border-none rounded-sm px-2 py-0.5 text-[12px] font-bold">
           内部
         </Badge>
-        <div className="h-4 w-px bg-border mx-2" />
-        <span className="text-[14px] font-bold text-[#1D2129]">航空工业教科院办公平台</span>
       </div>
 
       <div className="flex items-center gap-2">
-        {/* 规范：Header 必备搜索 */}
-        <div className="relative mr-4 hidden md:block">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#A8ABB2]" />
-          <Input 
-            placeholder="搜索系统内容..." 
-            className="w-64 h-8 pl-9 bg-[#F5F7FA] border-none text-[13px] placeholder:text-[#A8ABB2]" 
-          />
-        </div>
-
         <Button variant="ghost" size="icon" className="h-8 w-8 text-[#606266]">
           <HelpCircle className="h-5 w-5" />
         </Button>
