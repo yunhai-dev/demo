@@ -132,7 +132,7 @@ export default function ChatPage() {
         ref={scrollRef}
         className={cn(
           "absolute inset-0 overflow-y-auto scroll-smooth",
-          isEmpty ? "flex items-center justify-center" : "pt-6 pb-[240px]" 
+          isEmpty ? "flex items-center justify-center" : "pt-6 pb-[280px]" 
         )}
       >
         <div className={cn(
@@ -277,7 +277,7 @@ export default function ChatPage() {
   function renderInputArea() {
     return (
       <div className="w-full space-y-4">
-        <div className="relative bg-white rounded-sm border border-[#DCDFE6] shadow-sm focus-within:border-[#1E89FF] focus-within:shadow-md transition-all duration-300">
+        <div className="relative bg-white rounded-sm border border-[#DCDFE6] shadow-sm focus-within:border-[#1E89FF] focus-within:ring-1 focus-within:ring-[#1E89FF] transition-all duration-200 overflow-hidden">
           {selectedMode && (
             <div className="flex items-center px-4 pt-3">
               <div className="flex items-center gap-2 px-2 py-0.5 bg-[#EBF4FF] border border-[#C2DEFF] rounded-sm">
@@ -296,7 +296,7 @@ export default function ChatPage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下录入信息...` : "输入您的问题，基于教科院知识库为您解答..."}
             className={cn(
-              "min-h-[80px] max-h-[200px] border-none focus-visible:ring-0 text-[14px] leading-[22px] px-4 bg-transparent placeholder:text-[#A8ABB2] font-body",
+              "min-h-[80px] max-h-[200px] border-none focus-visible:ring-0 focus:ring-0 shadow-none text-[14px] leading-[22px] px-4 bg-transparent placeholder:text-[#A8ABB2] font-body resize-none",
               selectedMode ? "pt-1 pb-3" : "py-4"
             )}
             onKeyDown={(e) => {
@@ -322,7 +322,7 @@ export default function ChatPage() {
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
               size="sm" 
-              className="bg-[#1E89FF] hover:bg-[#006DEA] text-white rounded-sm h-8 px-4 flex items-center gap-2 text-[12px] font-bold"
+              className="bg-[#1E89FF] hover:bg-[#006DEA] text-white rounded-sm h-8 px-4 flex items-center gap-2 text-[12px] font-bold shadow-none"
             >
               提交指令
               <SendHorizontal className="h-3.5 w-3.5" />
