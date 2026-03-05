@@ -1,30 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
-import { Lightbulb, Box, ChevronRight, ChevronDown } from 'lucide-react';
+import { Lightbulb, Box, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white flex flex-col font-sans">
-      {/* 顶部导航栏 */}
-      <header className="h-14 flex items-center justify-between px-6 border-b border-slate-100 bg-white sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-slate-800 text-sm">知识库主页</span>
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 px-2 py-1 rounded-lg transition-colors">
-          <Avatar className="h-7 w-7 border border-slate-100">
-            <AvatarImage src="https://picsum.photos/seed/user-avatar/200" />
-            <AvatarFallback>张</AvatarFallback>
-          </Avatar>
-          <span className="text-xs font-medium text-slate-700">张三</span>
-          <ChevronDown className="h-3 w-3 text-slate-400" />
-        </div>
-      </header>
-
-      {/* 主体内容区 */}
-      <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-4 flex flex-col gap-6">
+    <div className="min-h-screen bg-white flex flex-col font-sans overflow-hidden">
+      {/* 主体内容区 - 居中展示 */}
+      <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-8 flex flex-col justify-center gap-6">
         
         {/* 插画横幅 Banner */}
         <section className="relative w-full aspect-[21/6] bg-[#E3F2FD] rounded-xl overflow-hidden shadow-sm">
@@ -36,7 +20,6 @@ export default function Home() {
             priority
             data-ai-hint="educational illustration"
           />
-          {/* 这里可以叠加一些简单的装饰性元素或遮罩，以匹配原图的清新感 */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#E3F2FD]/20 to-transparent" />
         </section>
 
@@ -48,7 +31,7 @@ export default function Home() {
           </p>
         </section>
 
-        {/* 核心模块与亮点 - 垂直堆叠以保持紧凑 */}
+        {/* 核心模块与亮点 */}
         <section className="flex flex-col gap-4">
           
           {/* 核心知识库模块 */}
@@ -90,7 +73,7 @@ export default function Home() {
               </li>
               <li className="relative before:content-['•'] before:absolute before:-left-4 before:text-slate-300">
                 <span className="font-semibold text-slate-700">AI 智能问答：</span>
-                嵌入先进 AI 交互功能，基于检索增强生成 (RAG) 架构，快速检索三大知识库相关内容并生成精准解答。用户可通过自然语言提问，高效获取关键信息、解决科研疑问，避免信息检索繁琐耗时的问题。
+                嵌入先进 AI 交互功能，基于检索增强生成 (RAG) 架构，快速检索三大知识库相关内容并生成精准解答。用户可通过自然语言提问，高效获取关键信息、解决科研疑问。
               </li>
             </ul>
           </div>
