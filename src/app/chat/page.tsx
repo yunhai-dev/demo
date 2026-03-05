@@ -31,7 +31,7 @@ interface Message {
   thought?: string;
   recommendedQuestions?: string[];
   isThinking?: boolean;
-  isTyping?: boolean; // 新增：标识是否正在打印中
+  isTyping?: boolean;
 }
 
 const AI_TOOLS = [
@@ -96,7 +96,6 @@ export default function ChatPage() {
     setInput('');
     setIsLoading(true);
 
-    // 1. 模拟 AI 思考过程
     setTimeout(() => {
       const responseTemplate = currentMode ? (MOCK_RESPONSES[currentMode] || MOCK_RESPONSES.default) : MOCK_RESPONSES.default;
       
@@ -105,7 +104,7 @@ export default function ChatPage() {
         id: aiMessageId,
         role: 'ai',
         thought: responseTemplate.thought,
-        content: '', // 初始内容为空，用于打字机效果
+        content: '',
         recommendedQuestions: responseTemplate.questions,
         isTyping: true,
       };
@@ -113,7 +112,6 @@ export default function ChatPage() {
       setMessages((prev) => [...prev, aiMessage]);
       setIsLoading(false);
 
-      // 2. 实现打字机效果
       let fullText = responseTemplate.content;
       let currentIndex = 0;
       
@@ -130,37 +128,37 @@ export default function ChatPage() {
             m.id === aiMessageId ? { ...m, isTyping: false } : m
           ));
         }
-      }, 30); // 打字速度：每 30 毫秒一个字
-    }, 2500); 
+      }, 30);
+    }, 2000); 
   };
 
   return (
     <div className="flex flex-col h-full bg-white relative overflow-hidden font-body">
-      {/* Content Area */}
+      {/* 消息展示区域 */}
       <div 
         ref={scrollRef}
         className={cn(
-          "flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 transition-all duration-500",
-          isEmpty ? "flex flex-col items-center justify-center p-6" : "pb-44"
+          "flex-1 overflow-y-auto scroll-smooth transition-all duration-500 relative",
+          isEmpty ? "flex flex-col items-center justify-center" : "pb-[200px]"
         )}
       >
         <div className={cn(
-          "w-full transition-all duration-500",
-          isEmpty ? "max-w-3xl flex flex-col items-center justify-center min-h-full space-y-8" : "max-w-3xl mx-auto p-6 space-y-8"
+          "w-full px-6 py-8",
+          isEmpty ? "max-w-3xl animate-in fade-in slide-in-from-bottom-6 duration-1000" : "max-w-3xl mx-auto space-y-10"
         )}>
           {isEmpty ? (
-            /* Empty State: Centered Welcome Section */
-            <div className="flex flex-col items-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 w-full">
+            /* 初始状态：居中引导 */
+            <div className="flex flex-col items-center text-center space-y-8 w-full">
               <div className="relative group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3 border border-white/20">
-                  <span className="text-white text-lg font-black tracking-tighter italic">Ai</span>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3 border border-white/20">
+                  <span className="text-white text-xl font-black tracking-tighter italic">Ai</span>
                 </div>
                 <div className="absolute -inset-2 rounded-2xl bg-blue-500/10 blur-md -z-10 animate-pulse" />
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-lg font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
-                <p className="text-slate-400 text-[11px] font-medium">请从左侧选择知识库或直接向我提问</p>
+                <h2 className="text-xl font-bold tracking-tight text-slate-800">上午好，有什么我可以帮助你的吗？</h2>
+                <p className="text-slate-400 text-[12px] font-medium">请从下方选择模式或直接输入问题</p>
               </div>
 
               <div className="w-full">
@@ -168,7 +166,7 @@ export default function ChatPage() {
               </div>
             </div>
           ) : (
-            /* Chat History */
+            /* 对话历史 */
             <div className="space-y-10">
               {messages.map((m) => (
                 <div key={m.id} className={cn(
@@ -176,23 +174,23 @@ export default function ChatPage() {
                   m.role === 'user' ? "items-end" : "items-start"
                 )}>
                   {m.role === 'ai' && (
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
-                      <span className="text-primary text-[10px] font-black italic">Ai</span>
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                      <span className="text-primary text-[11px] font-black italic">Ai</span>
                     </div>
                   )}
 
                   <div className="w-full space-y-4">
-                    {/* Thought Process (CoT) */}
+                    {/* 思维链展示 */}
                     {m.role === 'ai' && m.thought && (
                       <div className="ml-1 max-w-[90%] border-l-2 border-slate-200 pl-4 py-1">
                         <Collapsible defaultOpen={true}>
                           <CollapsibleTrigger className="flex items-center gap-2 text-[11px] font-bold text-slate-400 hover:text-primary transition-colors mb-2 group">
-                            <Brain className="h-3 w-3 text-slate-300 group-hover:text-primary animate-pulse" />
+                            <Brain className="h-3.5 w-3.5 text-slate-300 group-hover:text-primary animate-pulse" />
                             <span>深度思考过程</span>
                             <ChevronRight className="h-3 w-3 transition-transform data-[state=open]:rotate-90" />
                           </CollapsibleTrigger>
                           <CollapsibleContent>
-                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-3 rounded-lg border border-slate-100">
+                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100">
                               {m.thought}
                             </div>
                           </CollapsibleContent>
@@ -200,7 +198,7 @@ export default function ChatPage() {
                       </div>
                     )}
 
-                    {/* Message Content */}
+                    {/* 消息气泡 */}
                     <div className={cn(
                       "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap transition-all",
                       m.role === 'user' 
@@ -214,7 +212,7 @@ export default function ChatPage() {
                     </div>
                   </div>
                   
-                  {/* Footer actions and recommended questions (only show after typing is done) */}
+                  {/* AI 回复后的操作建议 */}
                   {m.role === 'ai' && !m.isTyping && (
                     <div className="mt-4 flex flex-col gap-4 w-full animate-in fade-in slide-in-from-top-2 duration-700">
                       <div className="flex items-center gap-1.5 ml-1">
@@ -223,9 +221,9 @@ export default function ChatPage() {
                             key={i}
                             variant="ghost" 
                             size="icon" 
-                            className="h-7 w-7 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg"
+                            className="h-8 w-8 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg"
                           >
-                            <Icon className="h-3.5 w-3.5" />
+                            <Icon className="h-4 w-4" />
                           </Button>
                         ))}
                       </div>
@@ -235,9 +233,7 @@ export default function ChatPage() {
                             <button 
                               key={rq} 
                               className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
-                              onClick={() => {
-                                setInput(rq);
-                              }}
+                              onClick={() => setInput(rq)}
                             >
                               {rq}
                             </button>
@@ -248,10 +244,12 @@ export default function ChatPage() {
                   )}
                 </div>
               ))}
+              
+              {/* 思考中状态 */}
               {isLoading && (
                 <div className="flex flex-col items-start animate-in fade-in duration-300">
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
-                    <span className="text-primary text-[10px] font-black italic">Ai</span>
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 flex items-center justify-center mb-2 border border-primary/10 shadow-sm">
+                    <span className="text-primary text-[11px] font-black italic">Ai</span>
                   </div>
                   <div className="max-w-[70%] p-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-slate-400 text-[13px] font-medium flex items-center gap-3">
                     <div className="flex gap-1">
@@ -268,9 +266,9 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* Persistent Input Bar (Only shown when not empty) */}
+      {/* 固定底部的输入栏（仅在非空时显示） */}
       {!isEmpty && (
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-xl border-t border-slate-100/50 shadow-[0_-8px_30px_rgba(0,0,0,0.02)] animate-in slide-in-from-bottom-full duration-700">
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100/50 shadow-[0_-8px_30px_rgba(0,0,0,0.03)] z-10 animate-in slide-in-from-bottom-full duration-700">
           <div className="max-w-3xl mx-auto">
             {renderInputArea()}
           </div>
@@ -282,10 +280,10 @@ export default function ChatPage() {
   function renderInputArea() {
     return (
       <div className="w-full space-y-4">
-        {/* Main Input Box */}
-        <div className="relative bg-white rounded-2xl border border-slate-200/80 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.05)] focus-within:border-primary/50 focus-within:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.15)] transition-all duration-300 overflow-hidden">
+        {/* 输入框主容器 */}
+        <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] focus-within:border-primary/50 focus-within:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.12)] transition-all duration-300 overflow-hidden">
           
-          {/* Mode Indicator Overlay */}
+          {/* 模式显示标签 */}
           {selectedMode && (
             <div className="flex items-center px-5 pt-3">
               <div className="flex items-center gap-2 px-2 py-0.5 bg-primary/5 border border-primary/15 rounded-md animate-in zoom-in-95 duration-200">
@@ -296,7 +294,7 @@ export default function ChatPage() {
                   onClick={() => setSelectedMode(null)}
                   className="p-0.5 hover:bg-primary/10 rounded-full transition-colors"
                 >
-                  <X className="h-2.5 w-2.5 text-primary/60" />
+                  <X className="h-3 w-3 text-primary/60" />
                 </button>
               </div>
             </div>
@@ -307,7 +305,7 @@ export default function ChatPage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={selectedMode ? `在 ${AI_TOOLS.find(t => t.mode === selectedMode)?.label} 模式下提问...` : "请输入您的问题..."}
             className={cn(
-              "min-h-[80px] max-h-[300px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300 transition-all",
+              "min-h-[90px] max-h-[250px] border-none focus-visible:ring-0 text-[14px] font-medium resize-none px-6 bg-transparent placeholder:text-slate-300 transition-all",
               selectedMode ? "pt-1 pb-3" : "py-4"
             )}
             onKeyDown={(e) => {
@@ -318,13 +316,13 @@ export default function ChatPage() {
             }}
           />
           
-          {/* Input Footer Bar */}
+          {/* 输入框底部工具栏 */}
           <div className="flex items-center justify-between px-5 pb-4 pt-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-7 px-2.5 rounded-lg bg-blue-50/80 text-primary hover:bg-blue-100/80 text-[10px] font-bold border border-blue-100/50 shadow-sm"
+                className="h-8 px-3 rounded-lg bg-blue-50 text-primary hover:bg-blue-100 text-[10px] font-bold border border-blue-100 shadow-sm transition-all"
               >
                 已选 {count} 项
                 <ChevronDown className="h-3 w-3 ml-1 opacity-60" />
@@ -333,7 +331,7 @@ export default function ChatPage() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-7 w-7 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                className="h-8 w-8 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
               >
                 <Paperclip className="h-4 w-4" />
               </Button>
@@ -343,28 +341,28 @@ export default function ChatPage() {
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
               size="sm" 
-              className="bg-primary hover:bg-primary/95 text-white rounded-xl h-8 px-5 text-[12px] font-bold transition-all shadow-lg shadow-primary/20 active:scale-95 disabled:shadow-none"
+              className="bg-primary hover:bg-primary/95 text-white rounded-xl h-9 px-6 text-[12px] font-bold transition-all shadow-lg shadow-primary/20 active:scale-95 disabled:shadow-none"
             >
               发送
             </Button>
           </div>
         </div>
 
-        {/* Tool Pills Bar - Compact Style */}
+        {/* 模式选择按钮组 */}
         <div className="flex items-center justify-center gap-2 overflow-x-auto scrollbar-hide py-1 px-4">
           {AI_TOOLS.map((tool) => (
             <button 
               key={tool.label}
               onClick={() => setSelectedMode(tool.mode === selectedMode ? null : tool.mode)}
               className={cn(
-                "flex items-center gap-2 px-3 py-1.5 bg-white border rounded-lg text-[11px] font-bold transition-all shadow-sm whitespace-nowrap active:scale-95 group",
+                "flex items-center gap-2 px-3.5 py-2 bg-white border rounded-lg text-[11px] font-bold transition-all shadow-sm whitespace-nowrap active:scale-95 group",
                 selectedMode === tool.mode 
                   ? "border-primary/30 bg-primary/5 text-primary ring-1 ring-primary/10" 
                   : "border-slate-100 text-slate-600 hover:border-primary/20 hover:text-primary"
               )}
             >
               <tool.icon className={cn(
-                "h-3 w-3 transition-colors", 
+                "h-3.5 w-3.5 transition-colors", 
                 selectedMode === tool.mode ? "text-primary" : tool.color, 
                 "group-hover:text-primary"
               )} />

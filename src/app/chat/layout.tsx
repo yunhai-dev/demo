@@ -12,11 +12,11 @@ export default function ChatLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full overflow-hidden">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1 min-w-0 bg-background overflow-hidden">
           <TopNav />
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1 overflow-hidden relative">
             {children}
           </main>
         </SidebarInset>
