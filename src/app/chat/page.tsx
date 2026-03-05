@@ -14,17 +14,21 @@ import {
   PieChart, 
   ChevronDown,
   X,
-  Paperclip
+  Paperclip,
+  Brain,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSelection } from '@/context/SelectionContext';
 import { cn } from '@/lib/utils';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface Message {
   id: string;
   role: 'user' | 'ai';
   content: string;
+  thought?: string;
   recommendedQuestions?: string[];
   isThinking?: boolean;
 }
@@ -37,20 +41,24 @@ const AI_TOOLS = [
   { icon: PieChart, label: 'AI 问数', color: 'text-rose-500', mode: 'data' },
 ];
 
-const MOCK_RESPONSES: Record<string, { content: string; questions: string[] }> = {
+const MOCK_RESPONSES: Record<string, { thought: string; content: string; questions: string[] }> = {
   writing: {
+    thought: "用户要求生成关于‘教育数字化转型’的公文大纲。首先，我需要明确公文的规范格式，通常包括背景、目标、任务和保障。其次，结合当前教育数字化的热点，如‘国家教育数字化战略行动’。我计划将重点放在‘人工智能赋能’和‘高质量均衡’两个维度。最后，检查语言风格，确保严谨、专业且具有指导性。",
     content: "已为您生成一份关于‘教育数字化转型’的公文大纲：\n\n1. 背景与意义：当前全球教育竞争的新高地\n2. 总体要求：坚持育人为本，技术赋能\n3. 重点任务：基础设施建设、资源平台优化、素养提升\n4. 保障措施：经费投入与安全防护。\n\n您需要我对其中哪个章节进行详细扩写吗？",
     questions: ["扩写第三部分“重点任务”", "将大纲转换为PPT演讲稿格式", "增加关于区域差异的分析"]
   },
   translation: {
+    thought: "输入文本涉及‘人工智能对中国教育现代化’的影响。翻译时需注意专业术语的准确性，如‘personalized learning’（个性化学习）和‘teacher empowerment’（教师赋能）。语境为正式学术讨论，因此词汇选择应偏向书面语。我将采用地道的学术英语表达方式，确保逻辑衔接自然。",
     content: "Selected text translated to English:\n\n'The profound impact of AI on the modernization of China's education system is reflected in three dimensions: personalized learning, intelligent governance, and teacher empowerment.'\n\n是否需要将结果保存至您的个人知识库？",
     questions: ["润色为学术论文风格", "翻译为德语版本", "提取其中的核心术语"]
   },
   summary: {
+    thought: "这是一篇关于教育评价体系的政策文本。核心观点在于‘破五唯’后的新评价标准。我需要提取文中的主要矛盾点，并整理出具体的数字化解决方案。考虑到用户可能需要快速决策，摘要应采用列表形式，突出核心结论。同时，确保字数在300字以内以符合‘精简’的要求。",
     content: "经过深度阅读，为您总结了本文的核心观点：\n\n- 核心矛盾：传统评价体系与学生全面发展之间的脱节。\n- 解决方案：引入多维度智能评估模型，实现过程性评价。\n- 结论：数字化不是目的，而是实现公平教育的路径。\n\n摘要已为您精简至300字以内。",
     questions: ["列出文中提到的参考文献", "生成一份核心思维导图", "对比其他同类政策差异"]
   },
   default: {
+    thought: "用户提出了一个开放性的教育领域问题。我将从中国教育科学研究院的权威视角出发，首先检索相关的政策文件库（如‘十四五’教育规划）。接着，分析当前教育现代化的主要瓶颈和发展阶段。我需要给出一个既有宏观高度，又有微观案例支撑的回答，确保其权威性和可操作性。",
     content: "这是一个非常深刻的问题。基于中国教育科学研究院的权威数据库，我可以从政策解读、案例分析和数据支撑三个维度为您提供参考意见。目前，我国教育现代化已进入加速期，特别是针对您关注的领域，最新的政策导向强调了‘高质量均衡发展’。",
     questions: ["查看相关的政策条文原文", "获取近三年的统计数据对比", "了解在该领域表现突出的示范区"]
   }
@@ -94,13 +102,14 @@ export default function ChatPage() {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'ai',
+        thought: responseTemplate.thought,
         content: responseTemplate.content,
         recommendedQuestions: responseTemplate.questions,
       };
       
       setMessages((prev) => [...prev, aiMessage]);
       setIsLoading(false);
-    }, 2000); // 模拟2秒思考延迟
+    }, 2500); // 模拟稍长的思考延迟以展示思维链的重要性
   };
 
   return (
@@ -121,7 +130,7 @@ export default function ChatPage() {
             /* Empty State: Centered Welcome Section */
             <div className="flex flex-col items-center text-center space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 w-full">
               <div className="relative group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3 border border-white/20">
                   <span className="text-white text-lg font-black tracking-tighter italic">Ai</span>
                 </div>
                 <div className="absolute -inset-2 rounded-2xl bg-blue-500/10 blur-md -z-10 animate-pulse" />
@@ -149,13 +158,35 @@ export default function ChatPage() {
                       <span className="text-primary text-[10px] font-black italic">Ai</span>
                     </div>
                   )}
-                  <div className={cn(
-                    "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap",
-                    m.role === 'user' 
-                      ? "bg-primary text-white ring-primary/20" 
-                      : "bg-slate-50 border border-slate-100 text-slate-700"
-                  )}>
-                    {m.content}
+
+                  <div className="w-full space-y-4">
+                    {/* Thought Process (CoT) */}
+                    {m.role === 'ai' && m.thought && (
+                      <div className="ml-1 max-w-[90%] border-l-2 border-slate-200 pl-4 py-1">
+                        <Collapsible defaultOpen={true}>
+                          <CollapsibleTrigger className="flex items-center gap-2 text-[11px] font-bold text-slate-400 hover:text-primary transition-colors mb-2 group">
+                            <Brain className="h-3 w-3 text-slate-300 group-hover:text-primary animate-pulse" />
+                            <span>深度思考过程</span>
+                            <ChevronRight className="h-3 w-3 transition-transform data-[state=open]:rotate-90" />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="text-[12px] leading-relaxed text-slate-500 italic font-medium bg-slate-50/50 p-3 rounded-lg border border-slate-100">
+                              {m.thought}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </div>
+                    )}
+
+                    {/* Message Content */}
+                    <div className={cn(
+                      "max-w-[85%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ring-1 ring-black/5 whitespace-pre-wrap",
+                      m.role === 'user' 
+                        ? "bg-primary text-white ring-primary/20 float-right ml-auto" 
+                        : "bg-white border border-slate-100 text-slate-700 clear-both"
+                    )}>
+                      {m.content}
+                    </div>
                   </div>
                   
                   {m.role === 'ai' && (
@@ -180,7 +211,6 @@ export default function ChatPage() {
                               className="px-4 py-1.5 rounded-full bg-blue-50/50 text-[11px] font-medium text-primary border border-primary/10 hover:bg-primary/5 hover:border-primary/30 transition-all active:scale-95"
                               onClick={() => {
                                 setInput(rq);
-                                // 自动触发发送逻辑或提示用户发送
                               }}
                             >
                               {rq}
@@ -203,7 +233,7 @@ export default function ChatPage() {
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                    正在深度分析并为您构建答案...
+                    正在深度思考并为您构建逻辑链...
                   </div>
                 </div>
               )}
