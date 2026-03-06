@@ -5,6 +5,13 @@ export interface KnowledgeNode {
   children?: KnowledgeNode[];
 }
 
+export interface ChatHistoryItem {
+  id: string;
+  title: string;
+  date: string;
+  preview: string;
+}
+
 export const INSTITUTIONAL_KNOWLEDGE: KnowledgeNode[] = [
   {
     id: 'inst-1',
@@ -45,5 +52,32 @@ export const PERSONAL_KNOWLEDGE: KnowledgeNode[] = [
     children: [
       { id: 'file-6', name: '待读研究文献.pdf', type: 'file' },
     ],
+  },
+];
+
+export const CHATS_HISTORY: ChatHistoryItem[] = [
+  {
+    id: 'chat-1',
+    title: '数字化转型方案讨论',
+    date: '2024-03-05 14:20',
+    preview: '关于航空工业数字化转型大纲的深度探讨...',
+  },
+  {
+    id: 'chat-2',
+    title: '航空技术规范解读',
+    date: '2024-03-04 09:15',
+    preview: '针对最新下发的安全生产技术标准的详细拆解...',
+  },
+  {
+    id: 'chat-3',
+    title: '科研项目进度汇报',
+    date: '2024-03-02 16:45',
+    preview: '总结了第一季度某型号研制的关键路径与风险点...',
+  },
+  {
+    id: 'chat-4',
+    title: '行业发展趋势分析',
+    date: '2024-02-28 11:30',
+    preview: '基于权威数据的全球航空产业格局演变分析...',
   },
 ];
