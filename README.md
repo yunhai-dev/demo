@@ -1,13 +1,13 @@
 # 航空工业 智能办公平台
 
-本项目是基于 Next.js 和 Genkit 构建的航空工业企业级智能办公系统，遵循集团 UI 设计规范，集成了 AI 知识库与对话交互功能。
+本项目是基于 Next.js 构建的航空工业企业级智能办公系统静态页面，遵循集团 UI 设计规范。
 
 ## 技术栈
 
 - **框架**: Next.js 15 (App Router)
-- **AI 引擎**: Genkit + Gemini 2.5
 - **UI 组件**: ShadCN UI + Lucide React
 - **样式**: Tailwind CSS (遵循航空工业 UI 规范)
+- **部署**: GitHub Pages
 
 ## 快速开始
 
@@ -16,47 +16,27 @@
    npm install
    ```
 
-2. **配置环境变量**:
-   在 `.env` 文件中配置您的 `GEMINI_API_KEY`。
-
-3. **启动开发服务器**:
+2. **启动开发服务器**:
    ```bash
    npm run dev
    ```
 
-## 代码提交指南
-
-请在项目根目录打开终端，依次执行以下命令将代码推送至您的远程仓库：
-
-1. **初始化本地仓库**:
+3. **构建静态文件**:
    ```bash
-   git init
+   npm run build
    ```
 
-2. **添加所有文件到暂存区**:
-   ```bash
-   git add .
-   ```
+## 部署
 
-3. **提交更改**:
-   ```bash
-   git commit -m "Initial commit: 航空工业智能办公平台重构完成"
-   ```
+本项目配置了 GitHub Actions 自动部署。当代码推送到 main 分支时，会自动构建并部署到 GitHub Pages。
 
-4. **关联远程仓库**:
-   ```bash
-   git remote add origin https://github.com/yunhai-dev/demo.git
-   ```
+访问地址: https://yunhai-dev.github.io/demo/
 
-5. **切换至主分支**:
-   ```bash
-   git branch -M main
-   ```
+### 首次部署设置
 
-6. **推送至远程仓库**:
-   ```bash
-   git push -u origin main
-   ```
+1. 进入 GitHub 仓库的 Settings > Pages
+2. Source 选择 "GitHub Actions"
+3. 推送代码到 main 分支即可自动部署
 
 ## 设计规范
 
