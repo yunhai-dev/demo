@@ -26,23 +26,33 @@
 
 ## 代码提交指南
 
-若要将代码提交至 GitHub 仓库：
+若要将项目推送至指定的 GitHub 仓库，请在终端执行以下命令：
 
-```bash
-# 初始化仓库
-git init
+1. **初始化本地仓库**:
+   ```bash
+   git init
+   ```
 
-# 添加远程仓库
-git remote add origin https://github.com/yunhai-dev/demo.git
+2. **添加所有文件到暂存区**:
+   ```bash
+   git add .
+   ```
 
-# 提交代码
-git add .
-git commit -m "Initial commit: 航空工业智能办公平台"
+3. **提交更改**:
+   ```bash
+   git commit -m "Initial commit: 航空工业智能办公平台重构完成"
+   ```
 
-# 推送
-git branch -M main
-git push -u origin main
-```
+4. **关联远程仓库**:
+   ```bash
+   git remote add origin https://github.com/yunhai-dev/demo.git
+   ```
+
+5. **切换至主分支并推送**:
+   ```bash
+   git branch -M main
+   git push -u origin main
+   ```
 
 ## 设计规范
 
@@ -51,5 +61,6 @@ git push -u origin main
 - **字号**: 14px / 行高 22px
 - **布局**: 24 栅格系统
 - **圆角**: 4px (rounded-sm)
+- **密级**: 必须明确展示（如：内部、公开）
 
 © 航空工业 版权所有
