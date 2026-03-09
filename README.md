@@ -26,7 +26,7 @@
 
 ## 代码提交指南
 
-若要将项目推送至指定的 GitHub 仓库，请在终端执行以下命令：
+请在项目根目录打开终端，依次执行以下命令将代码推送至您的远程仓库：
 
 1. **初始化本地仓库**:
    ```bash
@@ -48,9 +48,13 @@
    git remote add origin https://github.com/yunhai-dev/demo.git
    ```
 
-5. **切换至主分支并推送**:
+5. **切换至主分支**:
    ```bash
    git branch -M main
+   ```
+
+6. **推送至远程仓库**:
+   ```bash
    git push -u origin main
    ```
 
